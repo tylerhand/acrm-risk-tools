@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+
+{% block page %}
+
+    <script>
+        function hideLoadingElement() {
+            document.getElementById("loadingScreen").style.display = "none";
+        }
+
+    </script>
+
+    <div class="container-fluid embed-responsive h-100">
+        <div id="loadingScreen" class="container-fluid">
+            <br>
+            <div class="alert alert-warning">
+                <h3><span class="spinner-grow text-warning" role="status"></span> Loading...</h3>
+            </div>
+        </div>
+
+        <iframe onload="hideLoadingElement()" class="embed-responsive-item" style="width:100%; height:100%; overflow: hidden; border: none;" src="{{ target | safe }}">here</iframe>
+
+    </div>
+{% endblock %}

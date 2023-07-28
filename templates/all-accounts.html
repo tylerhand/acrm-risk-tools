@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<link href="/static/css/styles.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<br>
+
+<div class="card">
+    <div class="card-body">
+        <h1 class="display-5">Open Positions</h1>
+        <p class="lead">Below are open positions across UI ACRMP accounts. For greater detail on a specific account including trade history, balances and margin information, please select that account from the sidebar.</p>
+    </div>
+</div>
+
+<br>
+
+<div class="card">
+    <div class="card-header">
+        <h5>All Accounts</h5>
+    </div>
+    <div class="card-body">
+        <table class="table text-center">
+            <thead>
+            <tr>
+                <th scope="col">Account</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Contract</th>
+                <th scope="col">Card</th>
+                <th scope="col">Last Trading Day</th>
+                <th scope="col">Entry Price</th>
+                <th scope="col">Last Settle</th>
+                <th scope="col">UPL</th>
+            </tr>
+            </thead>
+            <tbody>
+
+
+            {% for item in positions['items'] %}
+
+                <tr>
+                    <td>{{ item['AccountNumber'] }}</td>
+                    <td>{% if item['QuantityShort'] %}-{% endif %}{{ item['LastQty'] | int }}</td>
+                    <td>{{ item['SecurityDescription'] }}</td>
+                    <td>{{ item['Card'] }}</td>
+                    <td>{{ item['FuturesLastTradeDate'].strftime('%m/%d/%y') }}</td>
+                    <td>{% if item['WeightedPriceLong']!= 0 %}{{ item['WeightedPriceLong'] }}{% else %} {{ item['WeightedPriceShort'] }}{% endif %}</td>
+                    <td>{{ item['SettlementPrice'] }}</td>
+                    <td>{% if item['PnLAmount'] > 0 %}<span class="text-success"><strong>${{ item['PnLAmount'] }}</strong></span>{% elif item['PnLAmount'] < 0 %}<span class="text-danger"><strong>${{ item['PnLAmount'] }}</strong></span>{% else %}<strong>${{ item['PnLAmount'] }}</strong>{% endif %}</td>
+                </tr>
+
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<link href="/static/css/styles.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    function openOrderTool() {
+        window.open(
+            "https://fo.stonex.com/OpenOrders",
+            "win",
+            `width=1000,height=400,screenX=200,screenY=200`
+        )
+    };
+</script>
+
+<br>
+
+<div>
+<table class="table table-borderless">
+    <tbody>
+    <tr>
+
+    <td class="w-25">
+    <div class="card" style="width: 100%;">
+        <div class="card-header">
+            <strong>Account Information</strong>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Holder: </strong>{{ balances['MasterCompanyName'] }}</li>
+            <li class="list-group-item"><strong>Group Account: </strong>********</li>
+            <li class="list-group-item"><strong>Account Number: </strong>{{ balances['Account'] }}</li>
+        </ul>
+    </div>
+    </td>
+
+    <td class="w-25">
+    <div class="card" style="width: 100%;">
+        <div class="card-header">
+            <strong>Balances & Margin</strong>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>NLV: </strong>${{ balances['NetLiquidationValue'] }}</li>
+            <li class="list-group-item"><strong>Total Unrealized P/L: {% if balances['OpenTradeEquity'] > 0 %}<span class="text-success">${{ balances['OpenTradeEquity'] }}</span>{% elif balances['OpenTradeEquity'] < 0 %}<span class="text-danger">${{ balances['OpenTradeEquity'] }}</span>{% else %}${{ balances['OpenTradeEquity'] }}{% endif %}</strong></li>
+            <li class="list-group-item"><strong>Maintenance Margin: </strong>${{ balances['MaintenanceMargin'] }}</li>
+        </ul>
+    </div>
+    </td>
+
+    <td class="w-25">
+    <div class="card" style="width: 100%;">
+        <div class="card-header">
+            <strong>Broker Information</strong>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">{{ balances['MasterAccountPrimaryEmployeeName'] }}</li>
+            <li class="list-group-item">{{ balances['MasterAccountPrimaryEmployeePhone'] }}</li>
+            <li class="list-group-item">{{ balances['MasterAccountPrimaryEmployeeEmail'] }}</li>
+            <li class="list-group-item"><i>*The broker may only be contacted by authorized individuals (instructors)</i></li>
+        </ul>
+    </div>
+    </td>
+
+    </tr>
+    </tbody>
+</table>
+
+
+<br>
+
+<div class="card">
+    <div class="card-header">
+        <h5>Open Positions</h5>
+    </div>
+    <div class="card-body">
+        <table class="table text-center">
+            <thead>
+            <tr>
+                <th scope="col">Quantity</th>
+                <th scope="col">Contract</th>
+                <th scope="col">Card</th>
+                <th scope="col">Last Trading Day</th>
+                <th scope="col">Entry Price</th>
+                <th scope="col">Last Settle</th>
+                <th scope="col">UPL</th>
+            </tr>
+            </thead>
+            <tbody>
+
+
+                {% for item in positions['items'] %}
+
+                    <tr>
+                        <td>{% if item['QuantityShort'] %}-{% endif %}{{ item['LastQty'] | int }}</td>
+                        <td>{{ item['SecurityDescription'] }}</td>
+                        <td>{{ item['Card'] }}</td>
+                        <td>{{ item['FuturesLastTradeDate'].strftime('%m/%d/%y') }}</td>
+                        <td>{% if item['WeightedPriceLong']!= 0 %}{{ item['WeightedPriceLong'] }}{% else %} {{ item['WeightedPriceShort'] }}{% endif %}</td>
+                        <td>{{ item['SettlementPrice'] }}</td>
+                        <td>{% if item['PnLAmount'] > 0 %}<span class="text-success"><strong>${{ item['PnLAmount'] }}</strong></span>{% elif item['PnLAmount'] < 0 %}<span class="text-danger"><strong>${{ item['PnLAmount'] }}</strong></span>{% else %}<strong>${{ item['PnLAmount'] }}</strong>{% endif %}</td>
+                    </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<br>
+
+    <div class="card">
+        <h5 class="card-header">Working Orders</h5>
+        <div class="card-body">
+            <h5 class="card-title">Access Open Orders</h5>
+            <p class="card-text">This will require you to be signed in with a StoneX account (unfortunately, this is unavailable to students at this time).</p>
+            <button onclick="openOrderTool();" class="btn btn-warning">View Orders (pop-up window)</button>
+        </div>
+    </div>
+
+    <br>
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        </symbol>
+    </svg>
+
+    <div class="alert alert-warning d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+        <div>
+            <strong>Note: </strong>It will take 10 minutes after execution for trades to be shown below.
+        </div>
+    </div>
+
+    <br>
+
+    <div class="card">
+        <h5 class="card-header">Trading Activity - Last 14 Days</h5>
+        <div class="card-body">
+            <table class="table text-center">
+                <thead>
+                <tr>
+                    <th scope="col">Date/Time (CST)</th>
+                    <th scope="col">Card</th>
+                    <th scope="col">Contract</th>
+                    <th scope="col">Side</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Fill Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in trades %}
+                    {% if item['Account'] == account %}
+                    <tr>
+                        <th scope="row">{{ item['TimeStamp'].strftime('%m/%d/%y %H:%M %Z') }}</th>
+                        <td>{{ item['Card'] }}</td>
+                        <td>{{ item['SecurityDescription'] }}</td>
+                        <td>{{ item['Side'] }}</td>
+                        <td>{{ item['LastQty'] | int }}</td>
+                        <td>{{ item['Price'] }}</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="card">
+        <h5 class="card-header">Export Trade History</h5>
+        <div class="card-body">
+            <p class="card-text">Go here to export all order history for this account (or any account) as a CSV). You must include a start and end date.</p>
+            <form onsubmit="window.open(genExportURL())">
+
+                <script>
+                    function genExportURL() {
+                        var account = document.getElementById("accountField").value;
+                        var start = document.getElementById("startDate").value;
+                        var end = document.getElementById("endDate").value;
+
+                        return "/export/account/" + account + "?startDate=" + start + "&endDate=" + end;
+                    }
+                </script>
+
+                <table class="table-borderless">
+                    <tbody>
+                    <td>
+                    <div class="mb-3">
+                        <label for="startDate" class="form-label">Start Date<span class="text-danger">*</span></label>
+                        <input type="date" id="startDate" class="form-control" required>
+                    </div>
+                    </td>
+
+                    <td>
+                    <div class="mb-3">
+                        <label for="endDate" class="form-label">End Date<span class="text-danger">*</span></label>
+                        <input type="date" id="endDate" class="form-control" required>
+                    </div>
+                    </td>
+
+                    </tbody>
+                </table>
+
+                <div class="mb-3">
+                    <label for="accountField" class="form-label">Account<span class="text-danger">*</span></label>
+                    <select id="accountField" class="form-select">
+                        <option value="group">All Accounts</option>
+                        {% for item in menu %}
+                        <option>{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button id="CSVDataSubmit" type="submit" class="btn btn-warning">Download Data (CSV)</button>
+            </form>
+        </div>
+    </div>
+
+<br><br><br><br><br><br>
+
+</div>
