@@ -21,10 +21,10 @@ app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-db = SQLAlchemy(app)
+#db = SQLAlchemy(app)
 
 app.secret_key = config.siteConfig['secret-key']
-
+'''
 class availableCropInsurancePolicies(db.Model):
 
     __tablename__ = "crop_insurance_plans"
@@ -36,7 +36,7 @@ class availableCropInsurancePolicies(db.Model):
     crop_year = db.Column(db.Integer)
     crop = db.Column(db.String(20), nullable=False)
     description = db.Column(db.Text())
-
+'''
 
 
 # Basic Pages
@@ -45,7 +45,7 @@ app.add_url_rule('/contact', view_func=pages.contact)
 
 # Crop Insurance
 app.add_url_rule('/crop-insurance/calculator-input', view_func=crop_insurance.calculator_input,methods=['GET','POST'])
-app.add_url_rule('/crop-insurance/calculator-result', view_func=crop_insurance.calculator_result,methods=['GET','POST'])
+app.add_url_rule('/crop-insurance/calculator-result', view_func=crop_insurance.calculator_result,methods=['POST'])
 
 if __name__ == '__main__':
     app.run()

@@ -2,7 +2,12 @@ siteConfig = {
     'secret-key' : 'aabbbcccddd',
     'menu' : [
         {'label':'Home', 'link':'/','newtab':False},
+        {'label':'Crop Budgets', 'link':'https://www.uidaho.edu/cals/idaho-agbiz/crop-budgets','newtab':True},
+        {'label':'Crop Markets', 'link':'https://www.uidaho.edu/cals/idaho-agbiz/crop-markets','newtab':True},
+        {'label':'Livestock Budgets', 'link':'https://www.uidaho.edu/cals/idaho-agbiz/livestock-budgets','newtab':True},
+        {'label':'Livestock Markets', 'link':'https://www.uidaho.edu/cals/idaho-agbiz/livestock-markets','newtab':True},
         {'label':'Crop Insurance Calculator', 'link':'/crop-insurance/calculator-input','newtab':False},
+        {'label':'Find an Extension Office', 'link':'https://www.uidaho.edu/extension/directory/counties','newtab':True},
 
         {'label':'Example', 'link':'https://google.com','newtab':True}
 
@@ -36,4 +41,9 @@ mailgunConfig = {
 ##################################################################################################
 
 # Crop Insurance
-cropInsuranceAPIUrl = ''
+cropInsuranceConfig = {
+    'api-domain' : 'api.tylerhand.com', # Don't include the https://
+    'auth-username' : '',
+    'auth-password' : '',
+    'auth' : ''
+    }

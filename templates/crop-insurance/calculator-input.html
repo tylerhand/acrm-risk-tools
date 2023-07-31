@@ -5,11 +5,21 @@
         <br>
 
         <div class="alert alert-warning d-flex align-items-center" role="alert">
-  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
           <div>
-              <strong>Note: </strong> We are still working on adding different policies and including a wider variety of crops. Our first priority is grains. If you have any feedback or would like to request coverage of a specific crop, please get in touch.
+            <strong>Note: </strong> We are still working on adding different policies and including a wider variety of crops. Our first priority is grains. If you have any feedback or would like to request coverage of a specific crop, please get in touch.
           </div>
         </div>
+
+        {% if error %}
+
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+          <div>
+              {{error | safe}}
+          </div>
+        </div>
+        {% endif %}
 
         <h1 class="display-5">Crop Insurance Calculator</h1>
         <link class="lead">Please select from the below menu to view available policies and then generate estimates.</p>
@@ -17,13 +27,13 @@
     <form method="post">
     <div class="mb-3">
       <label for="stateSelect" class="form-label">State</label>
-      <input type="text" class="form-control" id="stateSelect" placeholder="Idaho" disabled>
+      <input type="text" class="form-control" id="stateSelect" name="state" value="Idaho" disabled required>
     </div>
 
     <div class="mb-3">
     <label for="cropSelect" class="form-label">Select Crop</label>
-    <select id="cropSelect" class="form-select" aria-label="Select crop">
-      <option selected>---Select Insurance Year---</option>
+    <select id="cropSelect" class="form-select" name="crop" aria-label="Select crop" required>
+      <option value="" selected>---Select Insurance Year---</option>
       <option value="1">2023</option>
       <option value="2">2024</option>
     </select>
@@ -31,8 +41,8 @@
 
     <div class="mb-3">
     <label for="yearSelect" class="form-label">Select Crop</label>
-    <select id="yearSelect" class="form-select" aria-label="Select year">
-      <option selected>---Select Crop---</option>
+    <select id="yearSelect" class="form-select" name="crop" aria-label="Select year" required>
+      <option value="" selected>---Select Crop---</option>
       <option value="1">Wheat</option>
       <option value="2">Corn</option>
     </select>
